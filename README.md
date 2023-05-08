@@ -25,7 +25,7 @@ To encrypt data, you can use the following command.
 
 ./coder [key] -e < original_file > encripted_file
 In this command, <coder> is the name of the executable file you built using the make command.
-<key> is the key that will be used to encrypt the data.
+[key] is the key number that will be used to encrypt the data.
 <-e> is the flag that say the program to encrypt.
 <original_file> is the file you want to encrypt.
 <encripted_file> is the file you want to create with the result of the encrypt.
@@ -35,7 +35,7 @@ To decrypt data, you can use the following command.
 
 ./coder [key] -d < encripted_file > decripted_file
 In this command, <coder> is the name of the executable file you built using the make command.
-<key> is the key that will be used to decrypt the data.
+[key] is the key number that will be used to decrypt the data.
 <-e> is the flag that say the program to decrypt.
 <original_file> is the file you want to decrypt.
 <encripted_file> is the file you want to create with the result of the decrypt.
