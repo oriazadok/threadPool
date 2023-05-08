@@ -152,9 +152,14 @@ void* clean() {
 int main( int argc, char *argv[] ) {
 
 	if ( argc != 3 ) {
-	    printf("usage: key < file \n");
-	    printf("!! data more than 1024 char will be ignored !!\n");
+	    printf("missing argument\n");
+		printf("syntax: ./coder <key> -e or ./coder <key> -d\n");
 	    return 1;
+	}
+
+	if( ( strcmp(argv[2], "-e")) && (strcmp(argv[2], "-d")) ) {
+		printf("Unrecognaized flag, use -e for encription or -d for decription\n");
+		return 1;
 	}
 
 	// get command's data
