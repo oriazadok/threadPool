@@ -22,6 +22,7 @@ int getData() {
 	char data[DATA_SIZE];
 	char c;
 	int counter = 0;
+	bzero(data, DATA_SIZE);
 
 	while( ( c = getchar() ) != EOF ) {
 		data[counter] = c;
@@ -33,6 +34,7 @@ int getData() {
 			pthread_cond_signal(&startCond);
 			pthread_mutex_unlock(&queueMutex);
 			counter = 0;
+			bzero(data, DATA_SIZE);
 		}
 	}
 
@@ -60,15 +62,20 @@ void* enc(void* key) {
 
 	while( 1 ) {
 
+		pthread_mutex_lock(&mutex);
 		if( n ) {
 
-			pthread_mutex_lock(&mutex);
 			node = n;
+			// printf("prevnum: %d\n", size(q));
+			// printf("prev: %p\n", n->prev);
 			n = n->prev;
-			pthread_mutex_unlock(&mutex);
+		}
+		pthread_mutex_unlock(&mutex);
 
+		if( node ) {
 			encrypt(node->data, *(int*)key);
 			node->isDone = 1;
+			node = NULL;
 		}
 
 		if(done && isEmpty(q)) {
@@ -130,25 +137,29 @@ void* clean() {
 	pQueueNode del = NULL;
 	// int f = 0;
 	while( 1 ) {
-
+		// printf("qtop: %p\n", q->top);
 		if( q->top ) {
 			if( q->top->isDone ) {
 
 				pthread_mutex_lock(&queueMutex);
+				// printf("\ndd: %d\n", size(q));
 				del = deQueue(q);
+				// printf("del is: %p\n", del);
 				pthread_mutex_unlock(&queueMutex);
 
 				// int f = 0;
 				// for(int i = 0; i < DATA_SIZE; i++) {
 				// 	printf("%c", del->data[i]);
-				// 	f++;
+				// 	// f++;
 				// }
+				// printf("fuck\n");	
 
 				// if(f == 1024) {
 				// 	printf("\n");
 				// 	f = 0;
 				// }
 				// printf("f: %d\n", f);
+				
 				printf("%s", del->data);
 				fflush(stdout);
 
@@ -161,7 +172,7 @@ void* clean() {
 			break;
 		}
 	}
-
+	
 	// printf("f: %d\n", f);
 
 	return NULL;

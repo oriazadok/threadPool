@@ -5,7 +5,7 @@
 #ifndef __QUEUE__
 #define __QUEUE__
 
-#define DATA_SIZE 1024
+#define DATA_SIZE 500
 
 typedef struct _QueueNode {
     char data[DATA_SIZE + 1];
