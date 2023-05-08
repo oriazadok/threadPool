@@ -202,6 +202,8 @@ int main( int argc, char *argv[] ) {
         }
     }
 
+	freeQueue(q);
+
 	pthread_mutex_destroy(&mutex);
 	pthread_mutex_destroy(&queueMutex);
 	pthread_cond_destroy(&startCond);
