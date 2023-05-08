@@ -33,7 +33,7 @@ In this command, <coder> is the name of the executable file you built using the 
 ## Decryption
 To decrypt data, you can use the following command.
 
-./coder <key> -d < encripted_file > decripted_file
+./coder [key] -d < encripted_file > decripted_file
 In this command, <coder> is the name of the executable file you built using the make command.
 <key> is the key that will be used to decrypt the data.
 <-e> is the flag that say the program to decrypt.
