@@ -4,13 +4,13 @@
 ## Project Description
 This project is a C implementation for encrypting and decrypting data.
 It takes standard input data and encrypts it using a received key.
-The data is then split into 1024 buffers in each thread and placed into a queue to maintain the correct order.
-Finally, a thread is responsible for placing the encrypted data in the right order.
+The data is then split into 1024 chars buffers for the threads to encrypt them.
+One thread is responsible for printing the encrypted data in the right order, and one more for cleaning the memory data. 
 
 The decryption process follows a similar pattern.
 The encrypted data is received through standard input and is decrypted using a received key.
-The data is then split into 1024 buffers in each thread and placed into a queue to maintain the correct order.
-Finally, a thread is responsible for placing the decrypted data in the right order.
+The data is then split into 1024 chars buffers for the threads to decrypt them.
+One thread is responsible for printing the decrypted data in the right order, and one more for cleaning the memory data. 
 
 ## Getting Started
 To get started with this project, you should clone the repository to your local machine.
@@ -23,7 +23,7 @@ Once the executable file has been built, you can use it to encrypt or decrypt da
 ## Encryption
 To encrypt data, you can use the following command.
 
-./coder [key] -e <original_file > encripted_file
+./coder [key] -e < original_file > encripted_file
 In this command, <coder> is the name of the executable file you built using the make command.
 <key> is the key that will be used to encrypt the data.
 <-e> is the flag that say the program to encrypt.
@@ -33,7 +33,7 @@ In this command, <coder> is the name of the executable file you built using the 
 ## Decryption
 To decrypt data, you can use the following command.
 
-./coder key -d <original_file > encripted_file
+./coder <key> -d < encripted_file > decripted_file
 In this command, <coder> is the name of the executable file you built using the make command.
 <key> is the key that will be used to decrypt the data.
 <-e> is the flag that say the program to decrypt.
