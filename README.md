@@ -23,7 +23,7 @@ Once the executable file has been built, you can use it to encrypt or decrypt da
 ## Encryption
 To encrypt data, you can use the following command.
 
-./coder key -e <original_file > encripted_file
+./coder [key] -e <original_file > encripted_file
 In this command, <coder> is the name of the executable file you built using the make command.
 <key> is the key that will be used to encrypt the data.
 <-e> is the flag that say the program to encrypt.
@@ -39,4 +39,3 @@ In this command, <coder> is the name of the executable file you built using the 
 <-e> is the flag that say the program to decrypt.
 <original_file> is the file you want to decrypt.
 <encripted_file> is the file you want to create with the result of the decrypt.
-בחיים לא ראית כזה

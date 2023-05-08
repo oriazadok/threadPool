@@ -45,8 +45,6 @@ int getData() {
 		pthread_mutex_unlock(&queueMutex);
 	}
 
-	// printQueue(q);
-
 	done = 1;
 
 	return 0;
@@ -54,20 +52,16 @@ int getData() {
 
 void* enc(void* key) {
 
-	pQueueNode node;
+	pQueueNode node = NULL;
 
 	pthread_mutex_lock(&mutex);
     pthread_cond_wait(&cond, &mutex);
     pthread_mutex_unlock(&mutex);
 
 	while( 1 ) {
-
 		pthread_mutex_lock(&mutex);
 		if( n ) {
-
 			node = n;
-			// printf("prevnum: %d\n", size(q));
-			// printf("prev: %p\n", n->prev);
 			n = n->prev;
 		}
 		pthread_mutex_unlock(&mutex);
@@ -89,37 +83,32 @@ void* enc(void* key) {
 
 void* dec(void* key) {
 
-	// printf("Thread %lu is waiting on condition variable...\n", pthread_self());
-
-	// pthread_mutex_lock(&mutex);
-    // pthread_cond_wait(&cond, &mutex);
-    // pthread_mutex_unlock(&mutex);
-
-	// printf("Thread %lu got the signal!\n", pthread_self());
-
-	pQueueNode node;
+	pQueueNode node = NULL;
 
 	pthread_mutex_lock(&mutex);
     pthread_cond_wait(&cond, &mutex);
     pthread_mutex_unlock(&mutex);
 
 	while( 1 ) {
-
+		pthread_mutex_lock(&mutex);
 		if( n ) {
-
-			pthread_mutex_lock(&mutex);
 			node = n;
 			n = n->prev;
-			pthread_mutex_unlock(&mutex);
+		}
+		pthread_mutex_unlock(&mutex);
 
+		if( node ) {
 			decrypt(node->data, *(int*)key);
 			node->isDone = 1;
+			node = NULL;
 		}
 
 		if(done && isEmpty(q)) {
 			break;
 		}
 	}
+
+
 	return NULL;
 }
 
@@ -135,31 +124,15 @@ void* clean() {
     pthread_mutex_unlock(&mutex);
 
 	pQueueNode del = NULL;
-	// int f = 0;
 	while( 1 ) {
-		// printf("qtop: %p\n", q->top);
+
 		if( q->top ) {
 			if( q->top->isDone ) {
 
 				pthread_mutex_lock(&queueMutex);
-				// printf("\ndd: %d\n", size(q));
 				del = deQueue(q);
-				// printf("del is: %p\n", del);
 				pthread_mutex_unlock(&queueMutex);
 
-				// int f = 0;
-				// for(int i = 0; i < DATA_SIZE; i++) {
-				// 	printf("%c", del->data[i]);
-				// 	// f++;
-				// }
-				// printf("fuck\n");	
-
-				// if(f == 1024) {
-				// 	printf("\n");
-				// 	f = 0;
-				// }
-				// printf("f: %d\n", f);
-				
 				printf("%s", del->data);
 				fflush(stdout);
 
@@ -172,8 +145,6 @@ void* clean() {
 			break;
 		}
 	}
-	
-	// printf("f: %d\n", f);
 
 	return NULL;
 }
