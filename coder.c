@@ -16,38 +16,39 @@ pQueue q;
 pQueueNode n;
 
 int done = 0;
-
 int getData() {
 
-	char data[DATA_SIZE];
-	char c;
-	int counter = 0;
-	bzero(data, DATA_SIZE);
+    char data[DATA_SIZE];
+    char c;
+    int counter = 0;
+    bzero(data, DATA_SIZE);
 
-	while( ( c = getchar() ) != EOF ) {
-		data[counter] = c;
-		counter++;
+    while( ( c = getchar() ) != EOF ) {
+        data[counter] = c;
+        counter++;
 
-		if (counter == DATA_SIZE){
-			pthread_mutex_lock(&queueMutex);
-			enQueue(q, data);
-			pthread_cond_signal(&startCond);
-			pthread_mutex_unlock(&queueMutex);
-			counter = 0;
-			bzero(data, DATA_SIZE);
-		}
-	}
+        if (counter == DATA_SIZE){
+            pthread_mutex_lock(&queueMutex);
+            enQueue(q, data);
+            pthread_cond_signal(&startCond);
+            pthread_mutex_unlock(&queueMutex);
+            counter = 0;
+            bzero(data, DATA_SIZE);
+        }
+    }
 
-	if (counter > 0) {
-		data[counter] = '\0';
-		pthread_mutex_lock(&queueMutex);
-		enQueue(q, data);
-		pthread_mutex_unlock(&queueMutex);
-	}
+    if (counter > 0) {
+        data[counter] = '\0';
+        pthread_mutex_lock(&queueMutex);
+        enQueue(q, data);
+        pthread_cond_signal(&startCond);
+        pthread_mutex_unlock(&queueMutex);
+    }
 
-	done = 1;
+    done = 1;
+    pthread_cond_signal(&startCond);
 
-	return 0;
+    return 0;
 }
 
 void* enc(void* key) {
@@ -216,6 +217,3 @@ int main( int argc, char *argv[] ) {
 
 	return 0;
 }
-
-
-
